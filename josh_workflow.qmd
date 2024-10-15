@@ -1,0 +1,57 @@
+---
+title: "Josh_workflow"
+format: html
+editor: visual
+---
+
+## Packages
+```{r}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+library(plotly)
+
+```
+
+## Data Import
+```{r}
+claims <- read_csv("claims.csv")
+claims
+```
+
+## Data Cleaning
+```{r}
+claims_flt <- claims %>%
+ filter(STATUS1 %in% "BILLED") %>%
+ filter(STATUS2 %in% "BILLED" | is.na(STATUS2)) %>%
+ filter(STATUSP %in% 
+ "BILLED")
+
+claims_clean <- claims %>%
+  filter(DEPARTMENTID >= 6L & DEPARTMENTID <= 20L)
+
+claims_clean2 <- claims %>%
+  mutate(SERVICEDATE = year(SERVICEDATE)) %>%
+  filter(SERVICEDATE >= "2020-01-01") %>%
+  select(PATIENTID, PROVIDERID, DEPARTMENTID, DIAGNOSIS1)
+```
+
+## Data Visualization
+```{r}
+ dv1 <- ggplot(claims_clean) +
+ aes(x = DEPARTMENTID) +
+ geom_histogram(bins = 30L, fill = "#112446") +
+ theme_minimal()
+
+ggplotly(dv1)
+
+```
+
+
+
+## Data Analysis
+```{r}
+
+```
+
